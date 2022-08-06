@@ -3,9 +3,20 @@
     <div class="word">
       <template v-if="!spell">
         <h1>{{ wordObj?.word }}</h1>
+        <div class="voice">
+          语音：
+          <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
+        </div>
         <h3 v-show="show" class="meaning">{{ wordObj?.meaning }}</h3>
       </template>
-      <h3 v-else class="spell-meaning">{{ wordObj?.meaning }}</h3>
+      <div v-else class="spell-meaning">
+        <h3>{{ wordObj?.meaning }}</h3>
+        <div class="voice">
+          语音：
+          <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
+        </div>
+      </div>
+
     </div>
     <div class="spell" v-show="spell">
       <input type="text" class="input" placeholder="请输入拼写的单词" v-model="spellWord">
@@ -38,7 +49,6 @@ type WordType = {
   word: string,
   meaning: string
 }
-// const words = ref<WordType[]>([{ word: '334', meaning: 'hhh' }])
 const words = ref<WordType[]>([])
 const total = res.length
 const tenWords = ref<WordType[]>([])
@@ -137,7 +147,27 @@ const getWord = () => {
 getTenWords()
 getWord()
 
+// 语音
+const utterance = new SpeechSynthesisUtterance("Hello world!");
+utterance.lang = 'en-US' // 语言
+utterance.pitch = 0 // 音调
+utterance.rate = 0.8//  速度 0.1 - 10之间    正常为1倍播放
+const voice = ref(false)
+utterance.addEventListener('start', () => {
+  console.log('开始');
+  voice.value = true
+})
+utterance.addEventListener('end', () => {
+  console.log('结束');
+  voice.value = false
 
+})
+const playVoice = () => {
+  console.log('点击了');
+  utterance.text = wordObj.value.word
+
+  speechSynthesis.speak(utterance);
+}
 </script>
 
 <style lang="less">
@@ -145,6 +175,10 @@ getWord()
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.voice-color {
+  color: #25bbfb;
 }
 
 .app {
@@ -161,10 +195,19 @@ getWord()
     margin: 2% auto;
     border: 2px solid #36b7f2;
     border-radius: 10px;
+    padding: 2vh 0;
+    /* h1 {
+      margin: 8% 5% 0;
 
-    h1 {
-      margin: 8% 5%;
+    } */
 
+    .voice {
+      margin: 6vh;
+      font-weight: bold;
+
+      .voice-i {
+        cursor: pointer;
+      }
     }
 
     .meaning {
@@ -172,19 +215,18 @@ getWord()
     }
 
     .spell-meaning {
-      margin: 15% 5%;
+      margin-top: 5vh;
     }
   }
 
   .spell {
 
-    margin: 10% auto;
+    margin: 5vh auto;
     text-align: center;
-    height: 4%;
 
     .input {
-      width: 50%;
-      height: 100%;
+      width: 50vw;
+      min-height: 4vh;
       border: 2px solid #36b7f2;
       border-radius: 100px;
       padding-left: 5px;
@@ -193,6 +235,7 @@ getWord()
 
       &::placeholder {
         color: #5ec6f7;
+        font-size: 12px;
       }
     }
   }
@@ -224,7 +267,7 @@ getWord()
 
     .btn-no {
       background-color: #f56c6c;
-      margin-left: 10%;
+      margin-left: 10vh;
     }
   }
 
