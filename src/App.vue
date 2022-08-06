@@ -150,11 +150,12 @@ getWord()
 // 语音
 const voice = ref(false)
 const player = new Audio();
-player.src = 'http://dict.youdao.com/dictvoice?audio=' + wordObj.value.word
+
 console.log(player.src);
 
 const playVoice = () => {
   console.log('点击了');
+  player.src = 'http://dict.youdao.com/dictvoice?audio=' + wordObj.value.word
   voice.value = true
   player.play();
 }
