@@ -3,18 +3,18 @@
     <div class="word">
       <template v-if="!spell">
         <h1>{{ wordObj?.word }}</h1>
-        <div class="voice">
+        <!-- <div class="voice">
           语音：
           <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
-        </div>
+        </div> -->
         <h3 v-show="show" class="meaning">{{ wordObj?.meaning }}</h3>
       </template>
       <div v-else class="spell-meaning">
         <h3>{{ wordObj?.meaning }}</h3>
-        <div class="voice">
+        <!--  <div class="voice">
           语音：
           <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
-        </div>
+        </div> -->
       </div>
 
     </div>
@@ -148,7 +148,7 @@ getTenWords()
 getWord()
 
 // 语音
-const utterance = new SpeechSynthesisUtterance("Hello world!");
+/* const utterance = new SpeechSynthesisUtterance("Hello world!");
 utterance.lang = 'en-US' // 语言
 utterance.pitch = 0 // 音调
 utterance.rate = 0.8//  速度 0.1 - 10之间    正常为1倍播放
@@ -167,7 +167,7 @@ const playVoice = () => {
   utterance.text = wordObj.value.word
 
   speechSynthesis.speak(utterance);
-}
+} */
 </script>
 
 <style lang="less">
@@ -196,10 +196,11 @@ const playVoice = () => {
     border: 2px solid #36b7f2;
     border-radius: 10px;
     padding: 2vh 0;
-    /* h1 {
-      margin: 8% 5% 0;
 
-    } */
+    h1 {
+      margin: 8vh 0;
+
+    }
 
     .voice {
       margin: 6vh;
@@ -210,9 +211,9 @@ const playVoice = () => {
       }
     }
 
-    .meaning {
+    /* .meaning {
       margin: 0 5%;
-    }
+    } */
 
     .spell-meaning {
       margin-top: 5vh;
