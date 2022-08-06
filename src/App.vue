@@ -3,18 +3,18 @@
     <div class="word">
       <template v-if="!spell">
         <h1>{{ wordObj?.word }}</h1>
-        <!-- <div class="voice">
+        <div class="voice">
           语音：
           <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
-        </div> -->
+        </div>
         <h3 v-show="show" class="meaning">{{ wordObj?.meaning }}</h3>
       </template>
       <div v-else class="spell-meaning">
         <h3>{{ wordObj?.meaning }}</h3>
-        <!--  <div class="voice">
+        <div class="voice">
           语音：
           <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
-        </div> -->
+        </div>
       </div>
 
     </div>
@@ -148,26 +148,21 @@ getTenWords()
 getWord()
 
 // 语音
-/* const utterance = new SpeechSynthesisUtterance("Hello world!");
-utterance.lang = 'en-US' // 语言
-utterance.pitch = 0 // 音调
-utterance.rate = 0.8//  速度 0.1 - 10之间    正常为1倍播放
 const voice = ref(false)
-utterance.addEventListener('start', () => {
-  console.log('开始');
-  voice.value = true
-})
-utterance.addEventListener('end', () => {
-  console.log('结束');
-  voice.value = false
+const player = new Audio();
+player.src = 'http://dict.youdao.com/dictvoice?audio=' + wordObj.value.word
+console.log(player.src);
 
-})
 const playVoice = () => {
   console.log('点击了');
-  utterance.text = wordObj.value.word
+  voice.value = true
+  player.play();
+}
 
-  speechSynthesis.speak(utterance);
-} */
+player.addEventListener('ended', () => {
+  console.log('播放结束了');
+  voice.value = false
+})
 </script>
 
 <style lang="less">
@@ -195,10 +190,10 @@ const playVoice = () => {
     margin: 2% auto;
     border: 2px solid #36b7f2;
     border-radius: 10px;
-    padding: 2vh 0;
+    padding: 2vh 2vw;
 
     h1 {
-      margin: 8vh 0;
+      margin: 6vh 0;
 
     }
 
@@ -208,6 +203,7 @@ const playVoice = () => {
 
       .voice-i {
         cursor: pointer;
+        font-size: 18px;
       }
     }
 
