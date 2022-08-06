@@ -193,7 +193,7 @@ player.addEventListener('ended', () => {
     padding: 2vh 2vw;
 
     h1 {
-      margin: 6vh 0;
+      margin: 2vh 0;
 
     }
 
@@ -207,9 +207,6 @@ player.addEventListener('ended', () => {
       }
     }
 
-    /* .meaning {
-      margin: 0 5%;
-    } */
 
     .spell-meaning {
       margin-top: 5vh;
@@ -222,8 +219,8 @@ player.addEventListener('ended', () => {
     text-align: center;
 
     .input {
-      width: 50vw;
-      min-height: 4vh;
+      width: 250px;
+      height: 30px;
       border: 2px solid #36b7f2;
       border-radius: 100px;
       padding-left: 5px;
@@ -240,7 +237,7 @@ player.addEventListener('ended', () => {
   .btn {
     position: fixed;
     left: 0;
-    bottom: 10%;
+    bottom: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -269,7 +266,7 @@ player.addEventListener('ended', () => {
   }
 
   .count {
-    margin-top: 10%;
+    margin-top: 10vh;
 
     div {
       text-align: center;
