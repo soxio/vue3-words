@@ -4,7 +4,7 @@
       <template v-if="!spell">
         <h1>{{ wordObj?.word }}</h1>
         <div class="voice">
-          语音：
+          美音：/ {{ phonetic }} / ：
           <i class="iconfont icon-yuyin voice-i" :class="{ 'voice-color': voice }" @click="playVoice"></i>
         </div>
         <h3 v-show="show" class="meaning">{{ wordObj?.meaning }}</h3>
@@ -43,7 +43,8 @@
 import { ref } from 'vue';
 import res from './words.json'
 import { Dialog, Toast } from 'vant';
-
+import { jsonp } from 'vue-jsonp'
+import CryptoJS from 'crypto-js';
 // 随机十个单词的数组
 type WordType = {
   word: string,
@@ -136,6 +137,7 @@ const getWord = () => {
   show.value = false
   let index = Math.floor(Math.random() * tenWords.value.length)
   wordObj.value = tenWords.value[index]
+  getPhonetic()
   const res = tenWords.value.splice(index, 1)
 
   const wIndex = words.value.findIndex(item => item.word === wordObj.value?.word)
@@ -144,15 +146,38 @@ const getWord = () => {
 }
 
 
-getTenWords()
-getWord()
+
 
 // 语音
 const voice = ref(false)
 const player = new Audio();
+const phonetic = ref('')
+const getPhonetic = async () => {
+  const appKey = '1d78e686733634b2';
+  const key = '7vFD0HXrMKdnZZsOSw6BE4tYX9gJpgeX';//注意：暴露appSecret，有被盗用造成损失的风险
+  const salt = (new Date).getTime();
+  const curtime = Math.round(new Date().getTime() / 1000);
+  const query = wordObj.value.word;
+  console.log('1111', wordObj.value);
 
-console.log(player.src);
-
+  // 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'
+  const from = 'en';
+  const to = 'zh-CHS';
+  const str1 = appKey + query + salt + curtime + key;
+  const sign = CryptoJS.SHA256(str1).toString(CryptoJS.enc.Hex);
+  const response = await jsonp('https://openapi.youdao.com/api', {
+    q: query,
+    appKey: appKey,
+    salt: salt,
+    from: from,
+    to: to,
+    sign: sign,
+    signType: "v3",
+    curtime: curtime,
+  })
+  phonetic.value = response.basic["us-phonetic"]
+  console.log(response.basic["us-phonetic"]);
+}
 const playVoice = () => {
   console.log('点击了');
   player.src = 'http://dict.youdao.com/dictvoice?audio=' + wordObj.value.word
@@ -164,6 +189,9 @@ player.addEventListener('ended', () => {
   console.log('播放结束了');
   voice.value = false
 })
+
+getTenWords()
+getWord()
 </script>
 
 <style lang="less">
